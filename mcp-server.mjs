@@ -36,6 +36,7 @@ import {
   saveTranslationCache,
   attachCachedTranslations,
   resolveTranslatorChannel,
+  listAvailableTranslatorChannels,
   translateText,
   needsTranslation,
   translationCacheKey,
@@ -144,6 +145,7 @@ async function buildSnapshot(options = {}) {
     entries,
     sessionInfo,
     channel,
+    availableChannels: listAvailableTranslatorChannels(),
     config: viewerConfig,
     generatedAt: new Date().toISOString(),
   };
@@ -196,6 +198,7 @@ async function actionSessions(args) {
     activeConversationId: active,
     sessions,
     channel,
+    availableChannels: listAvailableTranslatorChannels(),
     config: viewerConfig,
     generatedAt: new Date().toISOString(),
   };
@@ -250,6 +253,7 @@ async function actionRead(args) {
     entries,
     sessions,
     channel: publicChannel(resolveTranslatorChannel()),
+    availableChannels: listAvailableTranslatorChannels(),
     config: loadViewerConfig(),
     generatedAt: result.generatedAt,
   };
@@ -267,6 +271,7 @@ function actionConfig(args) {
     cachePath: "~/.gemini/thought-viewer/translation-cache.json",
     cacheCount: Object.keys(cache.entries).length,
     channel: publicChannel(resolveTranslatorChannel()),
+    availableChannels: listAvailableTranslatorChannels(),
   };
 }
 
@@ -379,6 +384,7 @@ function ensureWebServer() {
             activeConversationId: snap.activeConversationId || null,
             entries,
             channel: snap.channel || null,
+            availableChannels: snap.availableChannels || [],
             config: snap.config || {},
           });
           res.writeHead(200, { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store" });
