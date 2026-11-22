@@ -2,9 +2,9 @@
   "name": "azure-prism",
   "displayName": "苍蓝棱镜",
   "display_name": "苍蓝棱镜",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "logo": "assets/logo.svg",
-  "description": "在 Antigravity 侧边栏 / 全局面板中查看模型思考轨迹（PLANNER_RESPONSE.thinking、CHECKPOINT、USER_INPUT），支持会话切换、3.5 秒自动轮询、折叠卡片、双语对照/仅译文切换、自选外部模型与免密钥机器翻译。",
+  "description": "苍蓝棱镜（Azure Prism）— 原生模型思维链实时观测与多通道中文翻译面板：100% 只读解析会话思考轨迹（thinking / CHECKPOINT / USER_INPUT，截断自动补全），支持会话切换、3.5 秒自适应轮询、滚动锚定、双语对照/仅看译文一键切换、自选苍蓝协奏台外部模型翻译及内置免密钥零 Token 机器翻译（代码块保护 + 自动降级兜底）。",
   "capabilities": [
     "mcp"
   ]
