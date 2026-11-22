@@ -1,6 +1,6 @@
 {
   "mcpServers": {
-    "thought-viewer": {
+    "azure-prism": {
       "command": "node",
       "args": [
         "./mcp-server.mjs"

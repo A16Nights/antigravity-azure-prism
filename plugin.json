@@ -1,8 +1,8 @@
 {
-  "name": "thought-viewer",
+  "name": "azure-prism",
   "displayName": "苍蓝棱镜",
   "display_name": "苍蓝棱镜",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "logo": "assets/logo.svg",
   "description": "在 Antigravity 侧边栏 / 全局面板中查看模型思考轨迹（PLANNER_RESPONSE.thinking、CHECKPOINT、USER_INPUT），支持会话切换、3.5 秒自动轮询、折叠卡片、双语对照/仅译文切换、自选外部模型与免密钥机器翻译。",
   "capabilities": [

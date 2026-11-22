@@ -13,4 +13,4 @@ Antigravity 思维链实时观测与分析面板（MCP App + 独立 Web UI）。
 
 ## 安装方式
 
-将本目录放入 `~/.gemini/config/plugins/thought-viewer`，在 Antigravity 的 **Plugins** 面板中启用即可。
+将本目录放入 `~/.gemini/config/plugins/azure-prism`，在 Antigravity 的 **Plugins** 面板中启用即可。

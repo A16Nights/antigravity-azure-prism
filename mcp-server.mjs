@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 /**
- * thought-viewer / mcp-server.mjs
+ * azure-prism / mcp-server.mjs
  * stdio JSON-RPC 2.0 MCP 服务端，零外部依赖。
  *
  * 工具：
- *   thought_viewer_open — 打开 UI 面板（_meta.ui.resourceUri + Antigravity entrypoints）
- *   thought_viewer_api  — UI 专用数据接口（visibility: ["app"]）
+ *   azure_prism_open — 打开 UI 面板（_meta.ui.resourceUri + Antigravity entrypoints）
+ *   azure_prism_api  — UI 专用数据接口（visibility: ["app"]）
  */
 import http from "node:http";
 import readline from "node:readline";
@@ -43,9 +43,9 @@ import {
 } from "./lib/translator.mjs";
 import { buildViewerHtml } from "./lib/ui-html.mjs";
 
-const SERVER_NAME = "thought-viewer";
+const SERVER_NAME = "azure-prism";
 const SERVER_VERSION = "1.0.0";
-const VIEWER_URI = "ui://thought-viewer/viewer.html";
+const VIEWER_URI = "ui://azure-prism/viewer.html";
 const VIEWER_MIME = "text/html;profile=mcp-app";
 const PROTOCOL_VERSION = "2024-11-05";
 
@@ -53,7 +53,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 function log(...args) {
   try {
-    process.stderr.write(`[thought-viewer] ${args.map(String).join(" ")}\n`);
+    process.stderr.write(`[azure-prism] ${args.map(String).join(" ")}\n`);
   } catch {
     /* ignore */
   }
@@ -267,8 +267,8 @@ function actionConfig(args) {
   return {
     ok: true,
     config,
-    configPath: "~/.gemini/thought-viewer/config.json",
-    cachePath: "~/.gemini/thought-viewer/translation-cache.json",
+    configPath: "~/.gemini/azure-prism/config.json",
+    cachePath: "~/.gemini/azure-prism/translation-cache.json",
     cacheCount: Object.keys(cache.entries).length,
     channel: publicChannel(resolveTranslatorChannel()),
     availableChannels: listAvailableTranslatorChannels(),
@@ -445,19 +445,19 @@ async function handleApi(args = {}) {
       return actionTranslateLatest(args);
     case "sidebar_nav": {
       if (typeof args.showInLeftSidebar === "boolean") {
-        setLeftSidebarEnabled("thought-viewer", args.showInLeftSidebar);
+        setLeftSidebarEnabled("azure-prism", args.showInLeftSidebar);
         const rf = await refreshAntigravityMcpServers();
         return {
           ok: true,
-          pluginId: "thought-viewer",
+          pluginId: "azure-prism",
           showInLeftSidebar: args.showInLeftSidebar,
           refreshed: Boolean(rf?.ok),
         };
       }
       return {
         ok: true,
-        pluginId: "thought-viewer",
-        showInLeftSidebar: isLeftSidebarEnabled("thought-viewer"),
+        pluginId: "azure-prism",
+        showInLeftSidebar: isLeftSidebarEnabled("azure-prism"),
       };
     }
     case "theme": {
@@ -487,7 +487,7 @@ async function handleApi(args = {}) {
 
 const TOOLS = [
   {
-    name: "thought_viewer_open",
+    name: "azure_prism_open",
     title: "打开苍蓝棱镜",
     description:
       "在 Antigravity 辅助面板或全局面板中打开苍蓝棱镜（Azure Prism）界面，展示会话的 PLANNER_RESPONSE.thinking、CHECKPOINT 与 USER_INPUT 记录。",
@@ -518,7 +518,7 @@ const TOOLS = [
     },
   },
   {
-    name: "thought_viewer_api",
+    name: "azure_prism_api",
     title: "苍蓝棱镜数据接口",
     description:
       "由查看器界面调用的数据接口。action 支持 sessions（会话列表）、read（读取思考轨迹）、config（读/写插件配置）、translate_one（翻译单条）、translate_latest（翻译最近若干条）。",
@@ -594,9 +594,9 @@ const TOOLS = [
 ];
 
 function listToolsResult() {
-  const showGlobal = isLeftSidebarEnabled("thought-viewer");
+  const showGlobal = isLeftSidebarEnabled("azure-prism");
   const dynamicTools = TOOLS.map((t) => {
-    if (t.name !== "thought_viewer_open") return t;
+    if (t.name !== "azure_prism_open") return t;
     const entrypoints = showGlobal
       ? [
           { type: "aux_pane", title: "苍蓝棱镜" },
@@ -651,9 +651,9 @@ async function readResourceResult(uri) {
 
 async function callTool(name, args = {}) {
   switch (name) {
-    case "thought_viewer_open":
+    case "azure_prism_open":
       return handleOpen(args);
-    case "thought_viewer_api":
+    case "azure_prism_api":
       return textResult(await handleApi(args));
     default:
       throw new Error(`未知工具: ${name}`);
@@ -675,7 +675,7 @@ async function dispatch(method, params = {}) {
           version: SERVER_VERSION,
         },
         instructions:
-          "调用 thought_viewer_open 打开苍蓝棱镜；界面通过 thought_viewer_api 拉取数据。",
+          "调用 azure_prism_open 打开苍蓝棱镜；界面通过 azure_prism_api 拉取数据。",
       };
     case "notifications/initialized":
       return null;
