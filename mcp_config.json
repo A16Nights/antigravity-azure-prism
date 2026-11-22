@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "thought-viewer": {
+      "command": "node",
+      "args": [
+        "./mcp-server.mjs"
+      ]
+    }
+  }
+}
