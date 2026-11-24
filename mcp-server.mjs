@@ -22,7 +22,7 @@ import {
   writeAzureThemeConfig,
   openLocalUrlInBrowser,
 } from "./lib/azure-theme.mjs";
-import { checkGithubUpdate } from "./lib/update-checker.mjs";
+import { checkGithubUpdate, readPluginVersion } from "./lib/update-checker.mjs";
 
 import {
   defaultBrainDir,

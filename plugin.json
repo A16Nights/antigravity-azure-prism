@@ -2,7 +2,7 @@
   "name": "azure-prism",
   "displayName": "苍蓝棱镜",
   "display_name": "苍蓝棱镜",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "logo": "assets/logo.svg",
   "description": "苍蓝棱镜（Azure Prism）— 原生模型思维链实时观测与多通道中文翻译面板：100% 只读解析会话思考轨迹（thinking / CHECKPOINT / USER_INPUT，截断自动补全），支持会话切换、3.5 秒自适应轮询、滚动锚定、双语对照/仅看译文一键切换、自选苍蓝协奏台外部模型翻译及内置免密钥零 Token 机器翻译（代码块保护 + 自动降级兜底）。",
   "capabilities": [
