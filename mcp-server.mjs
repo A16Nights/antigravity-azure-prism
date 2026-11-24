@@ -43,13 +43,12 @@ import {
 } from "./lib/translator.mjs";
 import { buildViewerHtml } from "./lib/ui-html.mjs";
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const SERVER_NAME = "azure-prism";
-const SERVER_VERSION = "1.0.0";
+const SERVER_VERSION = readPluginVersion(__dirname);
 const VIEWER_URI = "ui://azure-prism/viewer.html";
 const VIEWER_MIME = "text/html;profile=mcp-app";
 const PROTOCOL_VERSION = "2024-11-05";
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 function log(...args) {
   try {
@@ -396,12 +395,41 @@ function ensureWebServer() {
         return;
       }
       if (req.method === "POST" && urlPath === "/api") {
-        let raw = "";
-        req.on("data", (c) => { raw += c; if (raw.length > 262144) raw = raw.slice(0, 262144); });
+        const origin = String(req.headers?.origin || "").trim();
+        if (origin && origin !== "null") {
+          let okOrigin = false;
+          try {
+            const h = new URL(origin).hostname.toLowerCase();
+            okOrigin = h === "127.0.0.1" || h === "localhost" || h === "::1" || h === "[::1]";
+          } catch {}
+          if (!okOrigin) {
+            res.writeHead(403, { "Content-Type": "application/json; charset=utf-8" });
+            res.end(JSON.stringify({ ok: false, error: "Forbidden origin" }));
+            return;
+          }
+        }
+        const chunks = [];
+        let totalBytes = 0;
+        let tooLarge = false;
+        req.on("data", (c) => {
+          if (tooLarge) return;
+          const buf = Buffer.isBuffer(c) ? c : Buffer.from(String(c), "utf8");
+          totalBytes += buf.length;
+          if (totalBytes > 262144) {
+            tooLarge = true;
+            req.destroy();
+            res.writeHead(413, { "Content-Type": "application/json; charset=utf-8" });
+            res.end(JSON.stringify({ ok: false, error: "Payload too large" }));
+            return;
+          }
+          chunks.push(buf);
+        });
         req.on("end", async () => {
+          if (tooLarge) return;
           res.setHeader("Content-Type", "application/json; charset=utf-8");
           res.setHeader("Cache-Control", "no-store");
           try {
+            const raw = Buffer.concat(chunks).toString("utf8").trim();
             const body = raw ? JSON.parse(raw) : {};
             const data = await handleApi(body);
             res.writeHead(200);
