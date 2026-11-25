@@ -29,6 +29,7 @@ import {
   listRecentSessions,
   readSessionThoughts,
 } from "./lib/reader.mjs";
+import { fetchNativeSessionMap } from "./lib/native-titles.mjs";
 import {
   loadViewerConfig,
   saveViewerConfig,
@@ -106,7 +107,9 @@ async function buildSnapshot(options = {}) {
     ? Math.trunc(options.sessionLimit)
     : viewerConfig.lastSessionLimit || 30;
 
-  const sessions = listRecentSessions(brainDir, limit);
+  const nativeMap = await fetchNativeSessionMap().catch(() => new Map());
+  const sessions = listRecentSessions(brainDir, limit, { nativeMap });
+  const totalSessions = Number(sessions.totalCount || sessions.length);
   const channel = publicChannel(resolveTranslatorChannel());
 
   let activeConversationId = options.conversationId || viewerConfig.lastConversationId || null;
@@ -140,6 +143,9 @@ async function buildSnapshot(options = {}) {
   return {
     brainDir,
     sessions,
+    totalSessions,
+    sessionLimit: limit,
+    hasMoreSessions: totalSessions > sessions.length,
     activeConversationId,
     entries,
     sessionInfo,
@@ -184,7 +190,9 @@ async function actionSessions(args) {
   const brainDir = args.brainDir || defaultBrainDir();
   const viewerConfig = loadViewerConfig();
   const limit = Number.isFinite(Number(args.limit)) ? Math.trunc(Number(args.limit)) : viewerConfig.lastSessionLimit || 30;
-  const sessions = listRecentSessions(brainDir, limit);
+  const nativeMap = await fetchNativeSessionMap({ force: Boolean(args.force) }).catch(() => new Map());
+  const sessions = listRecentSessions(brainDir, limit, { nativeMap });
+  const totalSessions = Number(sessions.totalCount || sessions.length);
   const channel = publicChannel(resolveTranslatorChannel());
   const active =
     args.conversationId ||
@@ -196,6 +204,9 @@ async function actionSessions(args) {
     brainDir,
     activeConversationId: active,
     sessions,
+    totalSessions,
+    sessionLimit: limit,
+    hasMoreSessions: totalSessions > sessions.length,
     channel,
     availableChannels: listAvailableTranslatorChannels(),
     config: viewerConfig,
@@ -560,7 +571,7 @@ const TOOLS = [
         },
         force: {
           type: "boolean",
-          description: "check_update 时是否跳过缓存强制重新检查",
+          description: "check_update / translate_one / sessions 时是否跳过缓存强制刷新",
         },
         themeConfig: {
           type: "object",
@@ -591,10 +602,6 @@ const TOOLS = [
         text: {
           type: "string",
           description: "translate_one 时要翻译的原文",
-        },
-        force: {
-          type: "boolean",
-          description: "translate_one 时忽略缓存强制重新翻译",
         },
         count: {
           type: "integer",

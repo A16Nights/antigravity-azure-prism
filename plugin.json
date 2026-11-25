@@ -1,10 +1,14 @@
 {
+  "$schema": "https://antigravity.google/schemas/v1/plugin.json",
   "name": "azure-prism",
   "displayName": "苍蓝棱镜",
-  "display_name": "苍蓝棱镜",
-  "version": "1.2.4",
+  "version": "1.3.0",
   "logo": "assets/logo.svg",
-  "description": "苍蓝棱镜（Azure Prism）— 原生模型思维链实时观测与多通道中文翻译面板：100% 只读解析会话思考轨迹（thinking / CHECKPOINT / USER_INPUT，截断自动补全），支持会话切换、3.5 秒自适应轮询、滚动锚定、双语对照/仅看译文一键切换、自选苍蓝协奏台外部模型翻译及内置免密钥零 Token 机器翻译（代码块保护 + 自动降级兜底）。",
+  "description": "苍蓝棱镜（Azure Prism）— 原生模型思维链实时观测与多通道中文翻译面板：100% 只读解析会话思考轨迹（thinking / CHECKPOINT / USER_INPUT，截断自动补全），支持原生会话标题与无限历史分页、3.5 秒自适应轮询、滚动锚定、双语对照/仅看译文一键切换、引用思考到下条消息上下文与新会话深挖，以及外部模型/免密钥机器翻译。",
+  "suggestedPrompts": [
+    "打开苍蓝棱镜查看当前会话的思维链",
+    "用苍蓝棱镜翻译最近几条思考记录"
+  ],
   "capabilities": [
     "mcp"
   ]
