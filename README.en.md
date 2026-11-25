@@ -17,7 +17,7 @@
 </p>
 
 <p>
-  <strong>Native MCP App Chain-of-Thought viewer with lazy full-transcript loading, keyless zero-token MT, and external LLM translation</strong>
+  <strong>Native MCP App Chain-of-Thought viewer with native session titles, infinite history pagination, quote-to-chat interaction, and multi-channel translation</strong>
 </p>
 
 <p>
@@ -75,8 +75,10 @@ Embeds natively via <code>ui://azure-prism/viewer.html</code> with zero backgrou
   - **Bilingual**: Shows original reasoning above and the model-labeled Chinese translation below;
   - **Translated Only**: Hides English source text on translated cards while keeping a per-card **Show/Hide Original** shortcut (untranslated cards still display source text).
 
-### 4. Smart Filtering & Folding Controls
-- Switch across recent conversations with live thought counts and timestamps; filter with real-time keyword highlighting, toggle **Thinking Only / All Steps**, or **Expand / Collapse All**.
+### 4. Native Session Switching, Infinite History & Interactive Actions
+- **Native Titles & Infinite Pagination**: Displays native Antigravity session titles and live run states with infinite history pagination, thought counts, and timestamps.
+- **Smart Filtering & Folding**: Filter with real-time keyword highlighting, toggle **Thinking Only / All Steps**, or **Expand / Collapse All**.
+- **SEP-1865 MCP App Interactions**: Quote any reasoning card directly into your **next message context** or **open a fresh conversation** to deep-dive into a thought step.
 
 ### 5. Native MCP App + On-Demand Web UI + Unified Azure Suite UI
 - **Native MCP App**: Embedded via `_meta.ui.resourceUri` (`ui://azure-prism/viewer.html`) with zero idle ports; click `Web UI` to launch an on-demand local loopback server in your browser.
