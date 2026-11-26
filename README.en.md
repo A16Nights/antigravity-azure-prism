@@ -26,6 +26,11 @@
 
 </div>
 
+> [!TIP]
+> **Recommended Way to Read Native Gemini Thoughts in Chinese · Complement to Think-ZH**
+> - **Why Native Gemini Needs Azure Prism**: Google Cloud Code does not stream Gemini's raw internal thoughts to the client—instead, Google's server-side **Thought Summarizer** rewrites them into an English third-person summary (alongside an encrypted `thoughtSignature`). Prompt-based plugins cannot change the summarizer's output language, whereas Azure Prism reads the local transcript strictly read-only and translates it into Chinese in real time (keyless zero-token MT or external LLMs).
+> - **How It Pairs with [Think-ZH](https://github.com/A16Nights/antigravity-think-zh)**: Use **Think-ZH** to make **external custom reasoning models** (DeepSeek, Qwen, GLM, MiniMax, etc. streaming raw `reasoning_content`) think natively in Simplified Chinese; use **Azure Prism** to view, search, quote, and translate **native Gemini** (or any English-thinking model) thoughts into Chinese.
+
 A zero-intrusion Chain-of-Thought (`thinking`) viewer, search panel, and multi-channel Chinese translator for **Google Antigravity** (native MCP App + on-demand standalone Web UI). Reads local transcripts (`transcript.jsonl` / `transcript_full.jsonl`) strictly read-only without interfering with the active conversation or consuming primary context tokens.
 
 <table>
@@ -59,7 +64,7 @@ Embeds natively via <code>ui://azure-prism/viewer.html</code> with zero backgrou
 </h2>
 
 ### 1. Zero-Intrusion Live CoT Parsing & Lazy Truncation Hydration
-- **Strictly Read-Only Log Reader**: Scans `~/.gemini/antigravity/brain/<conversation-id>/.system_generated/logs/transcript.jsonl` to extract `PLANNER_RESPONSE.thinking` (with tool call names), `CHECKPOINT` compaction boundaries, and `USER_INPUT` turns.
+- **Strictly Read-Only Log Reader**: Scans `~/.gemini/antigravity/brain/<conversation-id>/.system_generated/logs/transcript.jsonl` to extract `PLANNER_RESPONSE.thinking` (server-side Thought Summaries for native Gemini or raw reasoning chains for external models, along with tool call names), `CHECKPOINT` compaction boundaries, and `USER_INPUT` turns.
 - **Automatic Full-Text Hydration**: Whenever `truncated_fields` includes `thinking`, lazily reads the exact line from `transcript_full.jsonl` for complete untruncated reasoning.
 - **3.5s Adaptive Polling & Scroll Anchoring**: Silently refreshes live thinking steps and compensates scroll offset whenever cards expand or translations arrive above the viewport.
 
@@ -173,7 +178,7 @@ All **9 Azure Suite plugins** share a unified **Neko Glass UI**, synchronized **
 | 🏛️ **Azure Corridor** | [antigravity-azure-corridor](https://github.com/A16Nights/antigravity-azure-corridor) | Read-only FTS5 conversation search, custom project groups, priority tags & safe archive |
 | 🌌 **Lanxi Memory** | [antigravity-lanxi-memory](https://github.com/A16Nights/antigravity-lanxi-memory) | 5-layer Markdown cognitive graph, CJK FTS5, tidal forgetting curves & starfield UI |
 | 💎 **Soul.md Studio** | [antigravity-soul-md](https://github.com/A16Nights/antigravity-soul-md) | Hot-swappable persona cards, workspace binding, external-model anchor & layered memory |
-| 💭 **Think-ZH** | [antigravity-think-zh](https://github.com/A16Nights/antigravity-think-zh) | Simplified Chinese / English reasoning switcher with dual-channel anti-drift hooks |
+| 💭 **Think-ZH** | [antigravity-think-zh](https://github.com/A16Nights/antigravity-think-zh) | Chinese/English reasoning controller for external custom models (auto-skips native models) |
 | 🔮 **Azure Prism** &nbsp;`✦ This Repo` | [antigravity-azure-prism](https://github.com/A16Nights/antigravity-azure-prism) | Native MCP App Chain-of-Thought viewer with keyless zero-token MT & LLM translation |
 | 🪄 **Azure Wand** | [antigravity-azure-wand](https://github.com/A16Nights/antigravity-azure-wand) | Low-intrusion Windows desktop & web automation with 15-state independent AI cursor, pack gallery & importer |
 

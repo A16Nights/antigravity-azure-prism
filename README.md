@@ -26,7 +26,12 @@
 
 </div>
 
-面向 **Google Antigravity** 的原生模型思维链（Chain of Thought / Thinking）实时观测、检索与多通道中文翻译面板（原生 MCP App 侧栏面板 + 按需本地独立 Web UI）。100% 只读解析本地会话日志（`transcript.jsonl` / `transcript_full.jsonl`），不干扰主对话、不消耗主脑上下文窗口。
+> [!TIP]
+> **原生 Gemini 看中文思考的推荐方案 · 与「思语中文」的分工定位**
+> - **为什么原生 Gemini 需要苍蓝棱镜**：Google Cloud Code 服务端不会将 Gemini 的原始内部思考下发到客户端，而是由云端 **Thought Summarizer** 压缩改写成英文第三人称摘要（并附带加密 `thoughtSignature`）；客户端提示词类插件无法改变该摘要的输出语言。苍蓝棱镜在本地零侵入提取该思考轨迹并实时中译（支持免密钥零 Token 机翻与外部模型双通道），让你无痛阅读中文思考。
+> - **与 [思语中文 (Think-ZH)](https://github.com/A16Nights/antigravity-think-zh) 互补**：想让**外部自定义推理模型**（如 DeepSeek、Qwen、GLM、MiniMax 等透传原生 `reasoning_content` 的模型）直接以简体中文生成原始思考，用 **思语中文**；想在 **原生 Gemini**（或任意英文思考模型）会话中阅读中文思考并支持检索、引用与深挖，用 **苍蓝棱镜**。
+
+面向 **Google Antigravity** 的模型思维链（Chain of Thought / Thinking）实时观测、检索与多通道中文翻译面板（原生 MCP App 侧栏面板 + 按需本地独立 Web UI）。100% 只读解析本地会话日志（`transcript.jsonl` / `transcript_full.jsonl`），不干扰主对话、不消耗主脑上下文窗口。
 
 <table>
 <tr>
@@ -60,7 +65,7 @@
 
 ### 1. 零侵入实时思维链解析与懒加载补全
 - **只读解析原生日志**：自动扫描 `~/.gemini/antigravity/brain/<conversation-id>/.system_generated/logs/transcript.jsonl`，精准提取：
-  - `PLANNER_RESPONSE.thinking`（模型每一步的完整内部推理链与对应工具调用名）；
+  - `PLANNER_RESPONSE.thinking`（模型每一步下发的思考内容——原生 Gemini 为云端 Thought Summary 思考摘要，外部推理模型为原始推理链——与对应工具调用名）；
   - `CHECKPOINT`（原生 `/compact` 上下文压缩分界线与摘要）；
   - `USER_INPUT`（用户每轮提问节点，形成清晰的问答思考脉络）。
 - **截断思考自动补全**：当紧凑日志中 `truncated_fields` 包含 `thinking` 时，自动按对应行号从 `transcript_full.jsonl` 懒加载完整未截断思考内容。
@@ -178,7 +183,7 @@ git clone https://github.com/A16Nights/antigravity-azure-prism.git ~/.gemini/con
 | 🏛️ **苍蓝回廊** | [antigravity-azure-corridor](https://github.com/A16Nights/antigravity-azure-corridor) | 只读原生会话 FTS5 全文检索、自定义项目分组、优先级标签与独立安全归档箱 |
 | 🌌 **蓝汐 · 潮汐认知图谱** | [antigravity-lanxi-memory](https://github.com/A16Nights/antigravity-lanxi-memory) | 五层纯 Markdown 真源记忆、CJK FTS5、潮汐遗忘曲线与交互式潮汐星海图谱 |
 | 💎 **苍蓝魂匣** | [antigravity-soul-md](https://github.com/A16Nights/antigravity-soul-md) | 多人设卡热切换、工作区专属绑定、外接模型智能防掉线锚点与分层文件记忆 |
-| 💭 **思语中文** | [antigravity-think-zh](https://github.com/A16Nights/antigravity-think-zh) | 内部思考语言简体中文 / 英文双档热切换、双通道防漂移与实时注入预览 |
+| 💭 **思语中文** | [antigravity-think-zh](https://github.com/A16Nights/antigravity-think-zh) | 面向外部推理模型的中文思考语言控制器（原生模型自动跳过、回合去重防漂移） |
 | 🔮 **苍蓝棱镜** &nbsp;`✦ 当前仓库` | [antigravity-azure-prism](https://github.com/A16Nights/antigravity-azure-prism) | 原生 MCP App 思维链实时观测、免密钥零 Token 机翻与外部模型双通道译文 |
 | 🪄 **苍蓝魔杖** | [antigravity-azure-wand](https://github.com/A16Nights/antigravity-azure-wand) | Windows 桌面与网页低打扰操控台、独立输入 15 状态 AI 光标、套装画廊混搭与外部光标导入 |
 
