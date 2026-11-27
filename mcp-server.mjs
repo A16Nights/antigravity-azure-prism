@@ -43,6 +43,7 @@ import {
   translationCacheKey,
 } from "./lib/translator.mjs";
 import { buildViewerHtml } from "./lib/ui-html.mjs";
+import { getOnboardingStatus, setOnboardingDismissed } from "./lib/azure-onboarding.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const SERVER_NAME = "azure-prism";
@@ -519,6 +520,17 @@ async function handleApi(args = {}) {
       const opened = openLocalUrlInBrowser(info.url);
       return { ok: opened.ok, url: info.url, error: opened.error || null };
     }
+    case "onboarding": {
+      const ver = String(args.guideVersion || "1").trim();
+      const op = String(args.op || "get").trim();
+      if (op === "dismiss" || op === "reset") {
+        return setOnboardingDismissed("azure-prism", {
+          dismissed: op !== "reset",
+          guideVersion: ver,
+        });
+      }
+      return { ok: true, ...getOnboardingStatus("azure-prism", ver) };
+    }
     default:
       throw new Error(`未知 action: ${action}`);
   }
@@ -566,8 +578,16 @@ const TOOLS = [
       properties: {
         action: {
           type: "string",
-          enum: ["sessions", "read", "config", "translate_one", "translate_latest", "sidebar_nav", "theme", "check_update", "open_web"],
+          enum: ["sessions", "read", "config", "translate_one", "translate_latest", "sidebar_nav", "theme", "check_update", "open_web", "onboarding"],
           description: "要执行的操作",
+        },
+        op: {
+          type: "string",
+          description: "onboarding 时指定 get / dismiss / reset",
+        },
+        guideVersion: {
+          type: "string",
+          description: "onboarding 引导版本号",
         },
         force: {
           type: "boolean",
